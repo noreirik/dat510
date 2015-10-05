@@ -12,6 +12,14 @@ public class Algorithms {
 	}
 	
 	/*
+	 * return true if the two numbers are relative prime, i.e
+	 * that their great common divisor is 1 
+	 */
+	public static boolean isRelativePrime(int a, int b) {
+		return gcd(a, b) == 1;
+	}
+	
+	/*
 	 * Return the result of the Euler totient function for
 	 * two prime numbers p and q
 	 */
