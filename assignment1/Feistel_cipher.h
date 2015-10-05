@@ -21,9 +21,10 @@ std::vector<std::bitset<ROUND_KEY_SIZE> > generate_round_keys(const std::bitset<
 // 
 std::bitset<BLOCK_SIZE/2> perform_round(const std::bitset<BLOCK_SIZE/2>& data, const std::bitset<ROUND_KEY_SIZE>& round_key);
 // 
-std::bitset<BLOCK_SIZE> encrypt(const std::bitset<BLOCK_SIZE>& input_text, const std::bitset<INPUT_KEY_SIZE>& input_key);
+std::bitset<BLOCK_SIZE> encrypt(const std::bitset<BLOCK_SIZE>& input_text, const std::bitset<INPUT_KEY_SIZE>& input_key, bool encrypt);
 
 // PC1 table is used in generating the 56b initial key from the 64b input key
+// this table is explained in section 3.1.3 of the report
 int pc_1_table[KEY_SIZE] = {
 	57,49,41,33,25,17,9,
 	1,58,50,42,34,26,18,
@@ -37,6 +38,7 @@ int pc_1_table[KEY_SIZE] = {
 std::vector<int> pc_1(pc_1_table, pc_1_table + KEY_SIZE);
 
 // PC2 table is used in generating the 48b round key from the 56b initial key
+// this table is explained in section 3.1.3 of the report
 int pc_2_table[ROUND_KEY_SIZE] = {
 	14,17,11,24,1,5,3,8,
 	15,6,21,10,23,19,12,4,
@@ -48,6 +50,7 @@ int pc_2_table[ROUND_KEY_SIZE] = {
 std::vector<int> pc_2(pc_2_table, pc_2_table + ROUND_KEY_SIZE);
 
 // key shift table is used to determine for a given round how many left shifts
+// this table is explained in section 3.1.3 of the report
 int key_schedule_table[] = {
 	1,1,2,2,2,2,2,2,
 	1,2,2,2,2,2,2,1
@@ -55,7 +58,7 @@ int key_schedule_table[] = {
 };
 std::vector<int> key_schedule(key_schedule_table, key_schedule_table + ROUND_NUM);
 
-// p_table is used to shrinking the lower from 48b to 32b to be able to xor left half
+// this table is explained in section 3.1.2 of the report
 int p_table_arr[] = {
 	16,1,2,19,7,15,8,13,
 	20,23,24,30,21,26,14,6,
@@ -64,6 +67,7 @@ int p_table_arr[] = {
 };
 int_vector p_table(p_table_arr, p_table_arr + 32);
 
+//this table is explained in section 3.1.2 of the report
 int e_table_arr[] = {
 	32,4,8,12,16,20,24,28,
 	1,5,9,13,17,21,25,29,
@@ -122,9 +126,10 @@ std::bitset<BLOCK_SIZE/2> copy_bit_pattern(const std::bitset<BLOCK_SIZE/2>& data
     return data;
 }
 
+//this is the function described in section 3.2.1: "Pseudo code"
 // given plain text and key, return cipher text
-std::bitset<BLOCK_SIZE> encrypt(const std::bitset<BLOCK_SIZE>& input_text, const std::bitset<INPUT_KEY_SIZE>& input_key, bool encrypt) {
-	std::bitset<BLOCK_SIZE> cipher_block;	
+std::bitset<BLOCK_SIZE> encrypt(const std::bitset<BLOCK_SIZE>& input_text, const std::bitset<INPUT_KEY_SIZE>& input_key, bool is_encrypt) {
+	std::bitset<BLOCK_SIZE> cipher_block;
 	// generate initial key	
 	std::bitset<KEY_SIZE> initial_key = generate_initial_key(input_key);
 	
@@ -141,27 +146,20 @@ std::bitset<BLOCK_SIZE> encrypt(const std::bitset<BLOCK_SIZE>& input_text, const
 	
 	std::bitset<BLOCK_SIZE/2> temp; // temporarily hold lower, so that upper can be used in XOR
 	
-	// if encryption
-	if (encrypt) {
+	if (is_encrypt) {
 		for (int i = 0; i < ROUND_NUM; ++i) {
-			//std::cout << "ROUND " << i << "----------------------------------------" << std::endl;
-			//std::cout << "Using key " <<  i << ":\t\t" << round_keys[i] << std::endl;
 			temp = copy_bit_pattern(lower); // hold r_i-1 in temp
 			lower = perform_round(lower, round_keys[i]);
 			lower ^= upper; // r_i = f(r_i-1,key) xor l_i-1
 			upper = copy_bit_pattern(temp); // l_i = r_i-1
-			std::cout << "ROUND " << i << " ENDED" << "----------------------------------" << std::endl;
 		}
 	} else {
 		// if decryption
 		for (int i = ROUND_NUM -1; i >= 0; --i) {
-			//std::cout << "ROUND " << i << "----------------------------------------" << std::endl;
-			//std::cout << "Using key " <<  i << ":\t\t" << round_keys[i] << std::endl;
 			temp = copy_bit_pattern(lower); // hold r_i-1 in temp
 			lower = perform_round(lower, round_keys[i]);
 			lower ^= upper; // r_i = f(r_i-1,key) xor l_i-1
 			upper = copy_bit_pattern(temp); // l_i = r_i-1
-			//std::cout << "ROUND " << i << " ENDED" << "----------------------------------" << std::endl;
 		}
 	}
 	
@@ -173,6 +171,7 @@ std::bitset<BLOCK_SIZE> encrypt(const std::bitset<BLOCK_SIZE>& input_text, const
 	
 	return cipher_block;
 }
+
 
 std::bitset<KEY_SIZE> generate_initial_key(const std::bitset<INPUT_KEY_SIZE>& input_key) {
 	// permute using pc_1 table, and return output
@@ -217,6 +216,7 @@ std::vector<std::bitset<ROUND_KEY_SIZE> > generate_round_keys(const std::bitset<
 	return round_keys;
 }
 
+// this function is explained in section 3.1.2: "Round function"
 std::bitset<32> perform_sbox_subst(const std::bitset<48>& input) {
     std::bitset<32> output;
     for (int i = 0; i < NUM_S_BOXES; ++i) {
@@ -239,6 +239,7 @@ std::bitset<32> perform_sbox_subst(const std::bitset<48>& input) {
     return output;
 }
 
+// this function is explained in section 3.1.2: "Round function"
 std::bitset<BLOCK_SIZE/2> perform_round(const std::bitset<BLOCK_SIZE/2>& data, const std::bitset<ROUND_KEY_SIZE>& round_key) {
 	// expand/permute data from 32b to 48b using e_table
 	std::bitset<48> expansion;
