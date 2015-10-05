@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Algorithms {
 	
 	/*
@@ -16,4 +18,22 @@ public class Algorithms {
 		return (p - 1)*(q - 1);
 	}
 	
+	/*
+	 * Return a randomly generated prime number
+	 */
+	public static int getPrime() {
+		Random rand = new Random();
+		while (true) {
+			int p = rand.nextInt();
+			if (isPrime(p)) return p;
+		}
+	}
+	
+	/*
+	 * TODO: Using some algorithm, determine if a is a prime number
+	 */
+	public static boolean isPrime(int a) {
+		return true;
+	}
+
 }
