@@ -8,4 +8,12 @@ public class Algorithms {
 		else return gcd(b, a % b);
 	}
 	
+	/*
+	 * Return the result of the Euler totient function for
+	 * two prime numbers p and q
+	 */
+	public static double getTotient(int p, int q) {
+		return (p - 1)*(q - 1);
+	}
+	
 }
