@@ -31,7 +31,10 @@ public class Algorithms {
 	 * Generate a pseudo-random number
 	 */
 	public static int getRandomNumber() {
-		return new Random().nextInt();
+		return getRandomNumber(Integer.MAX_VALUE);
+	}
+	public static int getRandomNumber(int max) {
+		return new Random().nextInt(max);
 	}
 	
 	/*
