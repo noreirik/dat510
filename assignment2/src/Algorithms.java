@@ -46,9 +46,29 @@ public class Algorithms {
 			if (isPrime(p)) return p;
 		}
 	}
+
+	/*
+	 * Implementation of inverse mod based on Extended Euclidean algorithm. Code translated from C++
+	 * to Java from http://rosettacode.org/wiki/Modular_inverse#C.2B.2B
+	 */
+	public static int modInverse(int a, int b) {
+		int b0 = b, t, q;
+		int x0 = 0, x1 = 1;
+		if (b == 1) return 1;
+		while (a > 1) {
+			q = a / b;
+			t = b;
+			b = a % b;
+			a = t;
+			t = x0; x0 = x1 - q * x0;
+			x1 = t;
+		}
+		if (x1 < 0) x1 += b0;
+		return x1;
+	}	
 	
 	/*
-	 * TODO: Using some algorithm, determine if a is a prime number
+	 * TODO: Using Miller-Rabbit algorithm, determine if input is a prime number
 	 */
 	public static boolean isPrime(int a) {
 		return true;
