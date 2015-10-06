@@ -5,7 +5,7 @@ public class Algorithms {
 	/*
 	 * Using Euclid's algorithm, return the great common divisor of a and b
 	 */
-	public static int gcd(int a, int b) {
+	public static double gcd(double a, double b) {
 		if (b == 0) return a;
 		else if (b == 1) return 1;
 		else return gcd(b, a % b);
@@ -15,7 +15,7 @@ public class Algorithms {
 	 * return true if the two numbers are relative prime, i.e
 	 * that their great common divisor is 1 
 	 */
-	public static boolean isRelativePrime(int a, int b) {
+	public static boolean isRelativePrime (double a, double b) {
 		return gcd(a, b) == 1;
 	}
 	
