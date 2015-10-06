@@ -28,12 +28,18 @@ public class Algorithms {
 	}
 	
 	/*
+	 * Generate a pseudo-random number
+	 */
+	public static int getRandomNumber() {
+		return new Random().nextInt();
+	}
+	
+	/*
 	 * Return a randomly generated prime number
 	 */
-	public static int getPrime() {
-		Random rand = new Random();
+	public static int getRandomPrime() {
 		while (true) {
-			int p = rand.nextInt();
+			int p = getRandomNumber();
 			if (isPrime(p)) return p;
 		}
 	}
