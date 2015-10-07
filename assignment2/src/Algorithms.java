@@ -15,27 +15,19 @@ public class Algorithms {
 	 * return true if the two numbers are relative prime, i.e
 	 * that their great common divisor is 1 
 	 */
-	public static boolean isRelativePrime (double a, double b) {
-		return gcd(a, b) == 1;
-	}
+	public static boolean isRelativePrime (double a, double b) { return gcd(a, b) == 1; }
 	
 	/*
 	 * Return the result of the Euler totient function for
 	 * two prime numbers p and q
 	 */
-	public static double getTotient(int p, int q) {
-		return (p - 1)*(q - 1);
-	}
+	public static double getTotient(int p, int q) { return (p - 1)*(q - 1); }
 	
 	/*
 	 * Generate a pseudo-random number
 	 */
-	public static int getRandomNumber() {
-		return getRandomNumber(Integer.MAX_VALUE);
-	}
-	public static int getRandomNumber(int max) {
-		return new Random().nextInt(max);
-	}
+	public static int getRandomNumber() { return getRandomNumber(Integer.MAX_VALUE); }
+	public static int getRandomNumber(int max) { return new Random().nextInt(max); }
 	
 	/*
 	 * Return a randomly generated prime number
@@ -65,13 +57,35 @@ public class Algorithms {
 		}
 		if (x1 < 0) x1 += b0;
 		return x1;
-	}	
+	}
+	
+	/*
+	 * return a^b (mod c)
+	 */
+	public static int modExp(int a, int b, int c) {
+		int r, x = 1;
+		
+		while (b != 0) {
+			r = b % 2;
+			b /= 2;
+			
+			if (r == 1) x = (x * a) % c;
+			a = (a * a) % c;
+		}
+		return x;
+	}
 	
 	/*
 	 * TODO: Using Miller-Rabbit algorithm, determine if input is a prime number
+	 * A return value of true means that n might be a prime, while a return value of false
+	 * means that n is definitely not prime.
 	 */
-	public static boolean isPrime(int a) {
+	public static boolean isPrime(int n) {
+		// 0, 1 are not prime. 2 is prime; other even numbers are not prime
+		if (n == 0 || n == 1) return false;
+		if (n == 2) return true;
+		if (n % 2 == 0) return false;
 		return true;
 	}
-
+	
 }
