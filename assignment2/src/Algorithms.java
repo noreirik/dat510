@@ -27,6 +27,7 @@ public class Algorithms {
 	 * Generate a pseudo-random number
 	 */
 	public static int getRandomNumber() { return getRandomNumber(Integer.MAX_VALUE); }
+	public static int getRandomNumber(int min, int max) { return min+getRandomNumber(max-min); }
 	public static int getRandomNumber(int max) { return new Random().nextInt(max); }
 	
 	/*
@@ -62,15 +63,15 @@ public class Algorithms {
 	/*
 	 * return a^b (mod c)
 	 */
-	public static int modExp(int a, int b, int c) {
-		int r, x = 1;
+	public static double modExp(double a, int b, double c) {
+		int r; double x = 1, a2 = a;
 		
 		while (b != 0) {
 			r = b % 2;
 			b /= 2;
 			
-			if (r == 1) x = (x * a) % c;
-			a = (a * a) % c;
+			if (r == 1) x = (x * a2) % c;
+			a2 = (a2 * a2) % c;
 		}
 		return x;
 	}
