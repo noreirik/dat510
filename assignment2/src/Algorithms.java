@@ -61,20 +61,34 @@ public class Algorithms {
 	}
 	
 	/*
-	 * return a^b (mod c)
+	 * return a^b (mod m)
 	 */
-	public static double modExp(double a, int b, double c) {
-		int r; double x = 1, a2 = a;
-		
-		while (b != 0) {
-			r = b % 2;
-			b /= 2;
-			
-			if (r == 1) x = (x * a2) % c;
-			a2 = (a2 * a2) % c;
+	public static double modExp(double a, int b, double m) {
+		double c = 0, f = 1;
+		for (int i = getBitCount(b); i >= 0; i--) {
+			c *= 2;
+			f = (f * f) % m;
+			if (isBitSet(b,i)) {
+				c++;
+				f = (f * a) % m;
+			}
 		}
-		return x;
+		return f;
 	}
+
+	// Check if bit index in a is set
+	public static boolean isBitSet(int a, int index) { return ((a >> index) & 1) == 1;	}
+	// Determine bit position of highest 1
+	public static int getHighestBitPosition(int i) {
+		int j = 0;
+		while (i != 0) {
+			i /= 2;
+			if (i != 0) j++;
+		}
+		return j;
+	}
+	// If a number is represented as the binary stream b[k],b[k-1],...,b[1],b[0], return k
+	public static int getBitCount(int i) { return getHighestBitPosition(Integer.highestOneBit(i)); }
 	
 	/*
 	 * TODO: Using Miller-Rabbit algorithm, determine if input is a prime number
