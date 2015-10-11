@@ -44,9 +44,9 @@ public class Algorithms {
 	 * Implementation of inverse mod based on Extended Euclidean algorithm. Code translated from C++
 	 * to Java from http://rosettacode.org/wiki/Modular_inverse#C.2B.2B
 	 */
-	public static int modInverse(int a, int b) {
-		int b0 = b, t, q;
-		int x0 = 0, x1 = 1;
+	public static double modInverse(double a, double b) {
+		double b0 = b; double t, q;
+		double x0 = 0, x1 = 1;
 		if (b == 1) return 1;
 		while (a > 1) {
 			q = a / b;

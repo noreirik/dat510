@@ -17,7 +17,8 @@ public class Key {
 	}
 	public static Key generatePrivateKey(double n, int e, double totient) {
 		Key privateKey = new Key(n);
-		// find d as modular inverse of e (mod totient); set as de
+		int inverse_e = (int) Algorithms.modInverse(e, totient);
+		privateKey.setDE(inverse_e);
 		return privateKey;
 	}
 	
