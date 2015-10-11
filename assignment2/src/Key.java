@@ -11,10 +11,10 @@ public class Key {
 		do {
 			e = Algorithms.getRandomNumber();
 		} while (!Algorithms.isRelativePrime(totient, e));
-		return generatePublicKey(n, e, totient);
+		return generatePublicKey(n, e);
 	}
 	// Allow setting all fields manually
-	public static Key generatePublicKey(double n, int e, double totient) {
+	public static Key generatePublicKey(double n, int e) {
 		Key pubKey  = new Key(n);
 		pubKey.setDE(e);
 		return pubKey;

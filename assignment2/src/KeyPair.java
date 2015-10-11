@@ -17,6 +17,11 @@ public class KeyPair {
 		this.publicKey = publicKey;
 	}
 	
+	public String toString() {
+		return	"Private key: n = " + privateKey.getN() + ", " + "d = " + privateKey.getDE() + "\n" +
+				"Public key: n = " + publicKey.getN() + ", " + "e = " + publicKey.getDE();		
+	}
+	
 	public Key getPrivateKey() { return privateKey; }
 	public Key getPublicKey() { return publicKey; }
 }
