@@ -91,15 +91,21 @@ public class Algorithms {
 	public static int getBitCount(int i) { return getHighestBitPosition(Integer.highestOneBit(i)); }
 	
 	/*
-	 * TODO: Using Miller-Rabbit algorithm, determine if input is a prime number
+	 * Using Fermat's theorem, determine if input is a prime number
 	 * A return value of true means that n might be a prime, while a return value of false
 	 * means that n is definitely not prime.
 	 */
 	public static boolean isPrime(int n) {
-		// 0, 1 are not prime. 2 is prime; other even numbers are not prime
-		if (n == 0 || n == 1) return false;
+		return isPrime(n, 50);
+	}
+	public static boolean isPrime(int n, int k) {
+		// 0, 1 are not prime. 2 is prime
+		if (n < 2) return false;
 		if (n == 2) return true;
-		if (n % 2 == 0) return false;
+		for (int i = 0; i < k; i++) {
+			int a = getRandomNumber(2, n-2);
+			if (modExp(a,n-1,n) != 1) return false; 
+		}
 		return true;
 	}
 	
