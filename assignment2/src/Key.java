@@ -7,18 +7,26 @@ public class Key {
 	}
 	
 	public static Key generatePublicKey(double n, double totient) {
-		Key pubKey = new Key(n);
 		int e;
 		do {
 			e = Algorithms.getRandomNumber();
 		} while (!Algorithms.isRelativePrime(totient, e));
+		return generatePublicKey(n, e, totient);
+	}
+	// Allow setting all fields manually
+	public static Key generatePublicKey(double n, int e, double totient) {
+		Key pubKey  = new Key(n);
 		pubKey.setDE(e);
 		return pubKey;
 	}
 	public static Key generatePrivateKey(double n, int e, double totient) {
-		Key privateKey = new Key(n);
 		int inverse_e = (int) Algorithms.modInverse(e, totient);
-		privateKey.setDE(inverse_e);
+		return generatePrivateKey(n, inverse_e);
+	}
+	//Allow setting all fields manually
+	public static Key generatePrivateKey(double n, int d) {
+		Key privateKey = new Key(n);
+		privateKey.setDE(d);
 		return privateKey;
 	}
 	

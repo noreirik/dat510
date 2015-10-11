@@ -3,8 +3,9 @@ public class KeyPair {
 	private Key publicKey;
 	
 	public KeyPair() {
-		int p = Algorithms.getRandomPrime();
-		int q = Algorithms.getRandomPrime();
+		this(Algorithms.getRandomPrime(), Algorithms.getRandomPrime());
+	}
+	public KeyPair(int p, int q) {
 		double n = p * q;
 		double totient = Algorithms.getTotient(p, q);
 		publicKey = Key.generatePublicKey(n,totient);
